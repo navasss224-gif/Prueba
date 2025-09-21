@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Center: YouTube & Spotify</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Montserrat', 'Roboto', Arial, sans-serif;
+            background: linear-gradient(120deg, #1db954 0%, #232526 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            color: #fff;
+            overflow-x: hidden;
+        }
+        .app {
+            display: flex;
+            min-height: 100vh;
+            backdrop-filter: blur(2px);
+        }
+        .sidebar {
+            width: 260px;
+            background: rgba(24,24,24,0.7);
+            box-shadow: 2px 0 32px #0008;
+            display: flex;
+            flex-direction: column;
+            padding: 40px 0 0 0;
+            border-top-right-radius: 32px;
+            border-bottom-right-radius: 32px;
+            backdrop-filter: blur(8px);
+        }
+        .sidebar h2 {
+            font-family: 'Montserrat', Arial, sans-serif;
+            color: #1db954;
+            text-align: center;
+            margin-bottom: 32px;
+            font-size: 2em;
+            letter-spacing: 2px;
+            text-shadow: 0 2px 12px #1db95488;
+        }
+        .menu-btn {
+            background: rgba(255,255,255,0.05);
+            border: none;
+            color: #fff;
+            font-size: 1.15em;
+            padding: 18px 40px;
+            text-align: left;
+            cursor: pointer;
+            transition: background 0.3s, color 0.3s, font-weight 0.3s;
+            width: 100%;
+            border-radius: 16px 0 0 16px;
+            margin-bottom: 8px;
+        }
+        .menu-btn.active, .menu-btn:hover {
+            background: linear-gradient(90deg, #1db954 0%, #232526 100%);
+            color: #fff;
+            font-weight: bold;
+            box-shadow: 0 2px 16px #1db95444;
+        }
+        .sidebar hr {
+            border: none;
+            border-top: 1px solid #1db95444;
+            margin: 24px 0;
+        }
+        .main {
+            flex: 1;
+            padding: 60px 0 0 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(255,255,255,0.04);
+            border-radius: 32px 0 0 32px;
+            box-shadow: 0 2px 32px #1db95422;
+            backdrop-filter: blur(6px);
+        }
+        .section {
+            width: 100%;
+            max-width: 800px;
+            display: none;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.10);
+            border-radius: 32px;
+            box-shadow: 0 2px 32px #1db95422;
+            padding: 40px 32px;
+            animation: fadeIn 1s;
+        }
+        .section.active {
+            display: block;
+        }
+        .main-menu {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 60vh;
+        }
+        .main-menu h1 {
+            font-size: 2.8em;
+            font-family: 'Montserrat', Arial, sans-serif;
+            color: #fff;
+            text-shadow: 0 2px 24px #1db95488;
+            margin-bottom: 32px;
+            letter-spacing: 2px;
+        }
+        .main-menu button {
+            margin: 18px 0;
+            font-size: 1.3em;
+            width: 320px;
+            padding: 18px 0;
+            border-radius: 16px;
+            background: linear-gradient(90deg, #1db954 0%, #232526 100%);
+            color: #fff;
+            font-weight: bold;
+            border: none;
+            box-shadow: 0 2px 16px #1db95444;
+            transition: background 0.3s, transform 0.3s;
+        }
+        .main-menu button:hover {
+            background: linear-gradient(90deg, #232526 0%, #1db954 100%);
+            transform: scale(1.05);
+        }
+        iframe {
+            width: 100%;
+            height: 600px;
+            border-radius: 24px;
+            border: none;
+            box-shadow: 0 2px 32px #1db95422;
+            margin-top: 16px;
+            background: rgba(0,0,0,0.15);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <nav class="sidebar">
+            <h2>Music Center</h2>
+            <button class="menu-btn active" id="btn-mainmenu" onclick="showSection('mainmenu')">Menú principal</button>
+            <button class="menu-btn" id="btn-yt" onclick="showSection('yt')">YouTube</button>
+            <button class="menu-btn" id="btn-spoty" onclick="showSection('spoty')">Spotify</button>
+        </nav>
+        <main class="main">
+            <section class="section active" id="section-mainmenu">
+                <div class="main-menu">
+                    <h1>Tu actividad en Music Center</h1>
+                    <div id="history-list" class="history-list">
+                        <!-- Historial visual aquí -->
+                    </div>
+                    <h2 style="margin-top:40px;">Tus favoritos</h2>
+                    <div id="favorites-list" class="favorites-list">
+                        <!-- Favoritos visuales aquí -->
+                    </div>
+                </div>
+            </section>
+            <section class="section" id="section-yt">
+                <!-- Aquí irá la app de YouTube (puedes pegar el código de yt.html aquí) -->
+                <iframe src="yt.html" style="width:100%;height:700px;border:none;border-radius:14px;box-shadow:0 2px 12px #e5091422;"></iframe>
+            </section>
+            <section class="section" id="section-spoty">
+                <!-- Aquí irá la app de Spotify (puedes pegar el código de Spoty.html aquí) -->
+                <iframe src="Spoty.html" style="width:100%;height:700px;border:none;border-radius:14px;box-shadow:0 2px 12px #1db95422;"></iframe>
+            </section>
+        </main>
+    </div>
+    <script>
+        // Historial y favoritos en localStorage
+        const historyKey = 'musiccenter_history';
+        const favoritesKey = 'musiccenter_favorites';
+
+        function saveToStorage(key, arr) {
+            localStorage.setItem(key, JSON.stringify(arr));
+        }
+        function getFromStorage(key) {
+            return JSON.parse(localStorage.getItem(key) || '[]');
+        }
+
+        function addToHistory(item) {
+            let history = getFromStorage(historyKey);
+            history = history.filter(h => h.id !== item.id); // Evita duplicados
+            history.unshift(item);
+            if(history.length > 10) history = history.slice(0,10);
+            saveToStorage(historyKey, history);
+            renderHistory();
+        }
+
+        function addToFavorites(item) {
+            let favs = getFromStorage(favoritesKey);
+            if(!favs.find(f => f.id === item.id)) {
+                favs.unshift(item);
+                if(favs.length > 10) favs = favs.slice(0,10);
+                saveToStorage(favoritesKey, favs);
+                renderFavorites();
+            }
+        }
+
+        function removeFavorite(id) {
+            let favs = getFromStorage(favoritesKey);
+            favs = favs.filter(f => f.id !== id);
+            saveToStorage(favoritesKey, favs);
+            renderFavorites();
+        }
+
+        function renderHistory() {
+            const history = getFromStorage(historyKey);
+            const container = document.getElementById('history-list');
+            container.innerHTML = history.length === 0 ? '<p style="color:#ccc">Aún no has visitado nada.</p>' : '';
+            history.forEach(item => {
+                container.innerHTML += `
+                    <div class="playlist-item" style="background:rgba(30,30,30,0.7);">
+                        <img src="${item.thumb}" class="thumb" alt="thumb">
+                        <span class="title">${item.title}</span>
+                        <button class="play-btn" onclick="goToSection('${item.section}')">Ver</button>
+                        <button class="delete-btn" onclick="addToFavorites({id:'${item.id}',title:'${item.title}',thumb:'${item.thumb}',section:'${item.section}'})">❤</button>
+                    </div>
+                `;
+            });
+        }
+
+        function renderFavorites() {
+            const favs = getFromStorage(favoritesKey);
+            const container = document.getElementById('favorites-list');
+            container.innerHTML = favs.length === 0 ? '<p style="color:#ccc">Aún no tienes favoritos.</p>' : '';
+            favs.forEach(item => {
+                container.innerHTML += `
+                    <div class="playlist-item" style="background:rgba(30,30,30,0.7);">
+                        <img src="${item.thumb}" class="thumb" alt="thumb">
+                        <span class="title">${item.title}</span>
+                        <button class="play-btn" onclick="goToSection('${item.section}')">Ver</button>
+                        <button class="delete-btn" onclick="removeFavorite('${item.id}')">Quitar</button>
+                    </div>
+                `;
+            });
+        }
+
+        function goToSection(section) {
+            showSection(section);
+            // Simula el registro en historial
+            let item;
+            if(section==='yt') {
+                item = {id:'yt',title:'YouTube Music',thumb:'https://img.icons8.com/color/96/youtube-play.png',section:'yt'};
+            } else if(section==='spoty') {
+                item = {id:'spoty',title:'Spotify Music',thumb:'https://img.icons8.com/color/96/spotify--v1.png',section:'spoty'};
+            }
+            if(item) addToHistory(item);
+        }
+
+        function showSection(section) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById('section-' + section).classList.add('active');
+            document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
+            if(section==='mainmenu') document.getElementById('btn-mainmenu').classList.add('active');
+            if(section==='yt') document.getElementById('btn-yt').classList.add('active');
+            if(section==='spoty') document.getElementById('btn-spoty').classList.add('active');
+        }
+
+        // Inicializa historial y favoritos al cargar
+        renderHistory();
+        renderFavorites();
+        showSection('mainmenu');
+    </script>
+</body>
+</html>

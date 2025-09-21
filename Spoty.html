@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MusicFusion Pro: YouTube & Spotify</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        /* --- Estilos globales --- */
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background: linear-gradient(135deg, #232526 0%, #1db954 100%);
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            transition: background 0.5s;
+        }
+        .topbar {
+            width: 100%;
+            background: #181818;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            box-shadow: 0 2px 16px #0006;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .topbar button {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.15em;
+            padding: 18px 38px;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+        .topbar button.active, .topbar button:hover {
+            background: #292929;
+            color: #1db954;
+        }
+        .fusion-content {
+            width: 100%;
+            min-height: 90vh;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            animation: fadeIn 1s;
+        }
+        .fusion-section {
+            display: none;
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 32px 0;
+        }
+        .fusion-section.active {
+            display: block;
+        }
+        /* Animaciones */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(40px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+        /* Modo oscuro */
+        .dark-mode {
+            background: linear-gradient(135deg, #181818 0%, #232526 100%);
+            color: #e0e0e0;
+        }
+        /* Ayuda flotante */
+        .help-btn {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            background: #1db954;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 56px;
+            height: 56px;
+            font-size: 2em;
+            box-shadow: 0 2px 12px #0006;
+            cursor: pointer;
+            z-index: 200;
+            transition: background 0.2s;
+        }
+        .help-btn:hover {
+            background: #e50914;
+        }
+        .help-modal {
+            position: fixed;
+            bottom: 100px;
+            right: 32px;
+            background: #232526;
+            color: #fff;
+            border-radius: 14px;
+            box-shadow: 0 2px 24px #000a;
+            padding: 24px;
+            max-width: 340px;
+            z-index: 201;
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        .help-modal.active {
+            display: block;
+        }
+        /* ...más estilos para los componentes internos... */
+    </style>
+</head>
+<body>
+    <div class="topbar">
+        <button id="btn-yt" class="active" onclick="showFusion('yt')">YouTube</button>
+        <button id="btn-spoty" onclick="showFusion('spoty')">Spotify</button>
+        <button id="btn-dark" onclick="toggleDarkMode()">🌙</button>
+    </div>
+    <div class="fusion-content">
+        <div class="fusion-section active" id="fusion-yt">
+            <!-- Aquí va el contenido de YouTube (pegado y adaptado) -->
+            <!-- ... -->
+        </div>
+        <div class="fusion-section" id="fusion-spoty">
+            <!-- Aquí va el contenido de Spotify (pegado y adaptado) -->
+            <!-- ... -->
+        </div>
+    </div>
+    <button class="help-btn" onclick="toggleHelp()">?</button>
+    <div class="help-modal" id="helpModal">
+        <h3>¿Necesitas ayuda?</h3>
+        <ul>
+            <li>Usa el menú superior para cambiar entre YouTube y Spotify.</li>
+            <li>Gestiona tus playlists y historial en cada plataforma.</li>
+            <li>Pega enlaces para añadir canciones.</li>
+            <li>Activa el modo oscuro con el botón 🌙.</li>
+        </ul>
+        <button onclick="toggleHelp()" style="margin-top:12px;">Cerrar</button>
+    </div>
+    <script>
+        // --- Navegación entre plataformas ---
+        function showFusion(section) {
+            document.getElementById('fusion-yt').classList.remove('active');
+            document.getElementById('fusion-spoty').classList.remove('active');
+            document.getElementById('btn-yt').classList.remove('active');
+            document.getElementById('btn-spoty').classList.remove('active');
+            if(section === 'yt') {
+                document.getElementById('fusion-yt').classList.add('active');
+                document.getElementById('btn-yt').classList.add('active');
+            } else {
+                document.getElementById('fusion-spoty').classList.add('active');
+                document.getElementById('btn-spoty').classList.add('active');
+            }
+        }
+        // --- Modo oscuro ---
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+        }
+        // --- Ayuda flotante ---
+        function toggleHelp() {
+            document.getElementById('helpModal').classList.toggle('active');
+        }
+        // Por defecto muestra YouTube
+        showFusion('yt');
+        // ...aquí irán los scripts de YouTube y Spotify fusionados...
+    </script>
+</body>
+</html>

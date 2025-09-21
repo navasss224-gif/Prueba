@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MusicTube Playlists</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background: linear-gradient(135deg, #232526 0%, #414345 100%);
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+        .app {
+            display: flex;
+            min-height: 100vh;
+        }
+        .sidebar {
+            width: 220px;
+            background: #181818;
+            box-shadow: 2px 0 16px #0006;
+            display: flex;
+            flex-direction: column;
+            padding: 32px 0 0 0;
+        }
+        .sidebar h2 {
+            font-family: 'Montserrat', Arial, sans-serif;
+            color: #e50914;
+            text-align: center;
+            margin-bottom: 24px;
+            font-size: 1.3em;
+        }
+        .menu-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.08em;
+            padding: 14px 32px;
+            text-align: left;
+            cursor: pointer;
+            transition: background 0.2s;
+            width: 100%;
+        }
+        .menu-btn.active, .menu-btn:hover {
+            background: #292929;
+            color: #ff6a00;
+        }
+        .sidebar hr {
+            border: none;
+            border-top: 1px solid #333;
+            margin: 18px 0;
+        }
+        .main {
+            flex: 1;
+            padding: 40px 0 0 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .section {
+            width: 100%;
+            max-width: 650px;
+            display: none;
+        }
+        .section.active {
+            display: block;
+        }
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 18px;
+            justify-content: center;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: none;
+            background: #292929;
+            color: #fff;
+            font-size: 1em;
+            box-shadow: 0 2px 8px #0003;
+            outline: none;
+            transition: box-shadow 0.2s;
+        }
+        input[type="text"]:focus {
+            box-shadow: 0 0 0 2px #e50914;
+        }
+        button {
+            padding: 12px 22px;
+            border-radius: 8px;
+            border: none;
+            background: linear-gradient(90deg, #e50914 60%, #ff6a00 100%);
+            color: #fff;
+            font-size: 1em;
+            font-weight: 500;
+            cursor: pointer;
+            box-shadow: 0 2px 8px #e5091433;
+            transition: background 0.2s, transform 0.2s;
+        }
+        button:hover {
+            background: linear-gradient(90deg, #ff6a00 0%, #e50914 100%);
+            transform: scale(1.05);
+        }
+        .playlist, .history {
+            margin-top: 32px;
+            min-height: 60px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+        .playlist-item, .history-item {
+            display: flex;
+            align-items: center;
+            background: #23272b;
+            border-radius: 14px;
+            box-shadow: 0 2px 12px #0004;
+            padding: 12px 18px;
+            gap: 18px;
+            animation: fadeIn 0.7s;
+            position: relative;
+            transition: box-shadow 0.2s;
+        }
+        .playlist-item:hover, .history-item:hover {
+            box-shadow: 0 4px 24px #e5091433;
+        }
+        .thumb, .history-thumb {
+            width: 80px;
+            height: 56px;
+            border-radius: 8px;
+            object-fit: cover;
+            box-shadow: 0 2px 8px #0003;
+        }
+        .title, .history-title {
+            font-size: 1.1em;
+            font-weight: 500;
+            color: #fff;
+            flex: 1;
+            text-shadow: 0 2px 8px #000a;
+        }
+        .play-btn, .history-play-btn {
+            background: linear-gradient(90deg, #e50914 60%, #ff6a00 100%);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 18px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            margin-right: 8px;
+            box-shadow: 0 2px 8px #e5091433;
+            transition: background 0.2s, transform 0.2s;
+        }
+        .play-btn:hover, .history-play-btn:hover {
+            background: linear-gradient(90deg, #ff6a00 0%, #e50914 100%);
+            transform: scale(1.08);
+        }
+        .delete-btn {
+            background: #292929;
+            color: #ff6a00;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 14px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 2px 8px #0003;
+            transition: background 0.2s, color 0.2s;
+        }
+        .delete-btn:hover {
+            background: #e50914;
+            color: #fff;
+        }
+        .video-modal {
+            margin-top:30px;
+            background:#222;
+            border-radius:14px;
+            box-shadow:0 2px 12px #0004;
+            padding:18px;
+            position:relative;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: fadeIn 0.5s;
+        }
+        .close-btn {
+            position:absolute;
+            top:12px;
+            right:12px;
+            background:#e50914;
+            color:#fff;
+            border:none;
+            border-radius:6px;
+            padding:6px 12px;
+            cursor:pointer;
+            font-weight:600;
+            font-size:1.2em;
+            box-shadow: 0 2px 8px #e5091433;
+        }
+        iframe {
+            width: 100%;
+            height: 400px;
+            border-radius: 10px;
+            border: none;
+            box-shadow: 0 2px 12px #e5091422;
+        }
+        .error {
+            color: #ff6a00;
+            text-align: center;
+            font-weight: 500;
+            margin-top: 18px;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <nav class="sidebar">
+            <h2>MusicTube</h2>
+            <button class="menu-btn active" id="btn-playlists" onclick="showSection('playlists')">Playlists</button>
+            <button class="menu-btn" id="btn-history" onclick="showSection('history')">Historial</button>
+            <hr>
+            <button class="menu-btn" id="btn-newlist" onclick="showSection('newlist')">Crear nueva lista</button>
+            <button class="menu-btn" id="btn-search" onclick="showSection('search')">Buscar y reproducir</button>
+        </nav>
+        <main class="main">
+            <section class="section active" id="section-playlists">
+                <h1 style="text-align:center;">Tus Playlists</h1>
+                <div id="playlists-list"></div>
+            </section>
+            <section class="section" id="section-history">
+                <h1 style="text-align:center;">Historial de videos vistos</h1>
+                <div class="history" id="history"></div>
+            </section>
+            <section class="section" id="section-newlist">
+                <h1 style="text-align:center;">Crear nueva playlist</h1>
+                <div class="input-group">
+                    <input type="text" id="newListName" placeholder="Nombre de la nueva playlist...">
+                    <button onclick="createPlaylist()">Crear</button>
+                </div>
+            </section>
+            <section class="section" id="section-currentlist" style="display:none;">
+                <h1 id="currentListTitle" style="text-align:center;"></h1>
+                <div class="input-group">
+                    <input type="text" id="youtubeUrl" placeholder="Pega aquí el enlace de YouTube...">
+                    <button onclick="addToCurrentPlaylist()">Añadir</button>
+                </div>
+                <div class="playlist" id="playlist"></div>
+            </section>
+            <section class="section" id="section-search">
+                <h1 style="text-align:center;">Buscar y reproducir canción</h1>
+                <div class="input-group">
+                    <input type="text" id="searchName" placeholder="Escribe el nombre de la canción...">
+                    <button onclick="searchSong()">Buscar</button>
+                </div>
+                <div id="searchResult"></div>
+            </section>
+            <div id="videoTab" style="display:none;">
+                <div class="video-modal">
+                    <button onclick="closeTab()" class="close-btn">✖</button>
+                    <div id="videoContainer"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script>
+        // Navegación y estructura
+        let playlists = JSON.parse(localStorage.getItem('ytPlaylists') || '{}');
+        let currentList = null;
+        let history = [];
+        if (localStorage.getItem('ytHistory')) {
+            try { history = JSON.parse(localStorage.getItem('ytHistory')); } catch {}
+        }
+        function showSection(section) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById('section-' + section).classList.add('active');
+            document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
+            if(section==='playlists') document.getElementById('btn-playlists').classList.add('active');
+            if(section==='history') document.getElementById('btn-history').classList.add('active');
+            if(section==='newlist') document.getElementById('btn-newlist').classList.add('active');
+            if(section==='search') document.getElementById('btn-search').classList.add('active');
+            if (section === 'playlists') renderPlaylists();
+            if (section === 'history') renderHistory();
+            if (section === 'currentlist') renderPlaylist();
+            if (section === 'search') renderSearch();
+            // Solución para mostrar/ocultar la sección de playlist actual
+            document.getElementById('section-currentlist').style.display = (section === 'currentlist') ? 'block' : 'none';
+        }
+        function createPlaylist() {
+            const name = document.getElementById('newListName').value.trim();
+            if (!name) return;
+            if (playlists[name]) {
+                alert('Ya existe una playlist con ese nombre.');
+                return;
+            }
+            playlists[name] = [];
+            localStorage.setItem('ytPlaylists', JSON.stringify(playlists));
+            document.getElementById('newListName').value = '';
+            showSection('playlists');
+        }
+        function renderPlaylists() {
+            const listDiv = document.getElementById('playlists-list');
+            listDiv.innerHTML = '';
+            const names = Object.keys(playlists);
+            if (names.length === 0) {
+                listDiv.innerHTML = '<div class="error">No tienes playlists. ¡Crea una!</div>';
+                return;
+            }
+            names.forEach(name => {
+                const item = document.createElement('div');
+                item.className = 'playlist-item';
+                item.innerHTML = `<span class='title'>${name}</span>
+                    <button class='play-btn' onclick='openPlaylist("${name}")'>Abrir</button>
+                    <button class='delete-btn' onclick='deletePlaylist("${name}")'>Eliminar</button>`;
+                listDiv.appendChild(item);
+            });
+        }
+        function openPlaylist(name) {
+            currentList = name;
+            document.getElementById('currentListTitle').textContent = name;
+            showSection('currentlist');
+            renderPlaylist();
+        }
+        function deletePlaylist(name) {
+            if (!confirm('¿Seguro que quieres eliminar la playlist "' + name + '"?')) return;
+            delete playlists[name];
+            localStorage.setItem('ytPlaylists', JSON.stringify(playlists));
+            renderPlaylists();
+        }
+        function addToCurrentPlaylist() {
+            const url = document.getElementById('youtubeUrl').value.trim();
+            const videoId = extractVideoId(url);
+            if (!videoId) {
+                showError('Enlace no válido. Por favor, pega un enlace de YouTube.');
+                return;
+            }
+            fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`)
+                .then(res => res.json())
+                .then(data => {
+                    playlists[currentList].push({
+                        id: videoId,
+                        title: data.title,
+                        thumb: data.thumbnail_url
+                    });
+                    document.getElementById('youtubeUrl').value = '';
+                    localStorage.setItem('ytPlaylists', JSON.stringify(playlists));
+                    renderPlaylist();
+                })
+                .catch(() => {
+                    showError('No se pudo obtener información del video.');
+                });
+        }
+        function renderPlaylist() {
+            const playlistDiv = document.getElementById('playlist');
+            playlistDiv.innerHTML = '';
+            if (!currentList || !playlists[currentList] || playlists[currentList].length === 0) {
+                playlistDiv.innerHTML = '<div class="error">Esta playlist está vacía. Añade enlaces de YouTube.</div>';
+                return;
+            }
+            playlists[currentList].forEach((video, idx) => {
+                const item = document.createElement('div');
+                item.className = 'playlist-item';
+                item.innerHTML = `
+                    <img src='${video.thumb}' class='thumb' alt='miniatura'>
+                    <span class='title'>${video.title}</span>
+                    <button class='play-btn' onclick='playVideo(${idx})'>Reproducir</button>
+                    <button class='delete-btn' onclick='deleteVideo(${idx})'>Eliminar</button>
+                `;
+                playlistDiv.appendChild(item);
+            });
+        }
+        function playVideo(idx) {
+            const videoTab = document.getElementById('videoTab');
+            const videoContainer = document.getElementById('videoContainer');
+            const video = playlists[currentList][idx];
+            videoTab.style.display = 'block';
+            videoContainer.innerHTML = `<iframe src='https://www.youtube.com/embed/${video.id}' allow='autoplay; encrypted-media' allowfullscreen></iframe>`;
+            addToHistory(video);
+        }
+        function closeTab() {
+            document.getElementById('videoTab').style.display = 'none';
+            document.getElementById('videoContainer').innerHTML = '';
+        }
+        function deleteVideo(idx) {
+            playlists[currentList].splice(idx, 1);
+            localStorage.setItem('ytPlaylists', JSON.stringify(playlists));
+            renderPlaylist();
+            closeTab();
+        }
+        function showError(msg) {
+            const playlistDiv = document.getElementById('playlist');
+            playlistDiv.innerHTML = `<div class='error'>${msg}</div>`;
+        }
+        function extractVideoId(url) {
+            // Extrae el ID del video de diferentes formatos de URL de YouTube
+                  const regExp = /^.*(?:youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[1].length === 11) ? match[1] : null;
+        }
+        // Historial
+        function addToHistory(video) {
+            if (!history.some(v => v.id === video.id)) {
+                history.unshift(video);
+                if (history.length > 20) history.pop();
+                localStorage.setItem('ytHistory', JSON.stringify(history));
+                renderHistory();
+            }
+        }
+        function renderHistory() {
+            const historyDiv = document.getElementById('history');
+            historyDiv.innerHTML = '';
+            if (history.length === 0) {
+                historyDiv.innerHTML = '<div class="error">Todavía no has visto ningún video.</div>';
+                return;
+            }
+            history.forEach((video, idx) => {
+                const item = document.createElement('div');
+                item.className = 'history-item';
+                item.innerHTML = `
+                    <img src='${video.thumb}' class='history-thumb' alt='miniatura'>
+                    <span class='history-title'>${video.title}</span>
+                    <button class='history-play-btn' onclick='playHistory(${idx})'>Ver de nuevo</button>
+                `;
+                historyDiv.appendChild(item);
+            });
+        }
+        function playHistory(idx) {
+            const videoTab = document.getElementById('videoTab');
+            const videoContainer = document.getElementById('videoContainer');
+            const video = history[idx];
+            videoTab.style.display = 'block';
+            videoContainer.innerHTML = `<iframe src='https://www.youtube.com/embed/${video.id}' allow='autoplay; encrypted-media' allowfullscreen></iframe>`;
+        }
+        // Buscar y reproducir
+        function renderSearch() {
+            document.getElementById('searchResult').innerHTML = '';
+            document.getElementById('searchName').value = '';
+        }
+        function searchSong() {
+            const name = document.getElementById('searchName').value.trim();
+            if (!name) return;
+            document.getElementById('searchResult').innerHTML = `
+                <div class="error">Copia el enlace de YouTube de la canción "<b>${name}</b>" y pégalo aquí para reproducir:</div>
+                <div class="input-group" style="margin-top:10px;">
+                    <input type="text" id="searchUrl" placeholder="Pega el enlace de YouTube...">
+                    <button onclick="playSearchedSong()">Reproducir</button>
+                </div>
+                <div id="searchedVideo"></div>
+            `;
+        }
+        function playSearchedSong() {
+            const url = document.getElementById('searchUrl').value.trim();
+            const videoId = extractVideoId(url);
+            if (!videoId) {
+                document.getElementById('searchedVideo').innerHTML = '<div class="error">Enlace no válido.</div>';
+                return;
+            }
+            document.getElementById('searchedVideo').innerHTML = `
+                <div class="video-modal" style="margin-top:20px;">
+                    <button onclick="document.getElementById('searchedVideo').innerHTML=''" class="close-btn">✖</button>
+                    <iframe src="https://www.youtube.com/embed/${videoId}" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                </div>
+            `;
+            // Añadir al historial
+            fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`)
+                .then(res => res.json())
+                .then(data => {
+                    addToHistory({id: videoId, title: data.title, thumb: data.thumbnail_url});
+                });
+        }
+        // Inicial
+        showSection('playlists');
+    </script>
+</body>
+</html>
